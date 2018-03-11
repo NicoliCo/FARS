@@ -5,3 +5,5 @@ Administration's [Fatality Anlaysis Reporting System](https://www.nhtsa.gov/rese
 (FARS).
 
 See the vignette for examples on how to use the package.
+
+[![Travis-CI Build Status](https://travis-ci.org/NicoliCo/FARS.svg?branch=master)](https://travis-ci.org/NicoliCo/FARS)
