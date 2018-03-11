@@ -1,0 +1,51 @@
+---
+title: "Introuction to FARS functions"
+author: "N. Ames"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introuction to FARS functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package contains functions which can be used to process data downloaded from the US National Highway Traffis Safety
+Administration's [Fatality Anlaysis Reporting System](https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars)
+(FARS).
+
+Two functions are exposed in this package:
+\itemize{
+   \item \code{fars_summarize_years()}
+   \item \code{fars_map_state()}
+}
+Examples of their use is shown in the sections below. Both functions rely on the FARS data which is included
+when you install the package. Currently, data for the years 2013, 2014, and 2015 are available with the package.
+
+## Summarize FARS data
+
+The \code{fars_summarize_years()} function takes as input a list of years and returns a tibble containing the
+number of entries in the FARS data for each month of the given years. First column
+is the month, and subsequent columns for each year. If a year is invalid, then a warning message is issued.
+
+```{r}
+library(FARS)
+fars_summarize_years(c(2013,2014,2015))
+```
+
+## Map fars data
+
+The \code{fars_map_state()} function takes as input a state and a year and plots a map of
+the location of the entries in the FARS database for the given state and year. The state is supplied as
+an integer.
+
+```{r}
+fars_map_state(1,2013)
+```
+
