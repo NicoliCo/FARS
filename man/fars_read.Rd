@@ -20,7 +20,3 @@ Administration's
 \href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{Fatality Anlaysis Reporting System}
 (FARS) and loads it into a data frame
 }
-\examples{
-fars_read(filename = 'accident_2013.csv.bz2')
-
-}

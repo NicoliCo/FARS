@@ -12,17 +12,20 @@
 #' @return If succesful, returns a tibble with the contents of the file. If the file
 #' doesn't exist, an error message is displayed
 #'
-#' @examples
-#' fars_read(filename = 'accident_2013.csv.bz2')
 #'
 fars_read <- function(filename) {
+    if(!file.exists(filename)){
+
         filename <- system.file("extdata", filename, package = "FARS")
-        if(!file.exists(filename))
-                stop("file '", filename, "' does not exist")
-        data <- suppressMessages({
-                readr::read_csv(filename, progress = FALSE)
-        })
-        dplyr::tbl_df(data)
+
+        if(!file.exists(filename)){
+            stop("file '", filename, "' does not exist")
+        }
+    }
+    data <- suppressMessages({
+        readr::read_csv(filename, progress = FALSE)
+    })
+    dplyr::as_tibble(data)
 }
 
 #' Make a FARS Filename from Year
@@ -38,8 +41,6 @@ fars_read <- function(filename) {
 #'
 #' @return A string in the format "accident_XXXX.csv.bz2" where XXXX is the year
 #'
-#' @examples
-#' make_filename(2013)
 #'
 make_filename <- function(year) {
         year <- as.integer(year)
@@ -61,23 +62,25 @@ make_filename <- function(year) {
 #' the FARS data for the given years. If a year is invalid, then a warning message is issued
 #' and NULL is returned.
 #'
-#' @examples
-#' fars_read_years(c(2013,2014,2015))
 #'
 #' @importFrom magrittr "%>%"
 #'
 fars_read_years <- function(years) {
-        lapply(years, function(year) {
-                file <- make_filename(year)
-                tryCatch({
-                        dat <- fars_read(file)
-                        dplyr::mutate(dat, year = year) %>%
-                                dplyr::select(MONTH, year)
-                }, error = function(e) {
-                        warning("invalid year: ", year)
-                        return(NULL)
-                })
+
+    year <- NULL
+    MONTH <- NULL
+
+    lapply(years, function(year) {
+        file <- make_filename(year)
+        tryCatch({
+            dat <- fars_read(file)
+            dplyr::mutate(dat, year = year) %>%
+                dplyr::select(MONTH, year)
+        }, error = function(e) {
+            warning("invalid year: ", year)
+            return(NULL)
         })
+    })
 }
 
 #' Summarize FARS Data for Years
@@ -94,18 +97,24 @@ fars_read_years <- function(years) {
 #' is the month, and subsequent columns for each year. If a year is
 #' invalid, then a warning message is issued.
 #'
-#' @examples
-#' fars_summarize_years(c(2013,2014,2015))
-#'
 #' @importFrom magrittr "%>%"
+#'
+#' @examples
+#' library(FARS)
+#' fars_summarize_years(c(2013,2014,2015))
 #'
 #' @export
 fars_summarize_years <- function(years) {
-        dat_list <- fars_read_years(years)
-        dplyr::bind_rows(dat_list) %>%
-                dplyr::group_by(year, MONTH) %>%
-                dplyr::summarize(n = n()) %>%
-                tidyr::spread(year, n)
+
+    year <- NULL
+    MONTH <- NULL
+    n <- NULL
+
+    dat_list <- fars_read_years(years)
+    dplyr::bind_rows(dat_list)  %>%
+        dplyr::group_by(year, MONTH)  %>%
+        dplyr::summarize(n = n())  %>%
+        tidyr::spread(year,  n)
 }
 
 #' Map FARS Entries for a State and Year
@@ -123,11 +132,15 @@ fars_summarize_years <- function(years) {
 #' @return As a side-effect, plots a map of FARS entries for the state and year
 #'
 #' @examples
+#' library(FARS)
 #' fars_map_state(1,2013)
 #'
 #'
 #' @export
 fars_map_state <- function(state.num, year) {
+
+        STATE <- NULL
+
         filename <- make_filename(year)
         data <- fars_read(filename)
         state.num <- as.integer(state.num)

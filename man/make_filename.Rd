@@ -19,7 +19,3 @@ Administration's
 \href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{Fatality Anlaysis Reporting System}
 (FARS).
 }
-\examples{
-make_filename(2013)
-
-}

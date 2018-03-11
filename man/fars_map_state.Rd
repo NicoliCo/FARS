@@ -23,6 +23,7 @@ Administration's
 combination do not exist in the FARS database.
 }
 \examples{
+library(FARS)
 fars_map_state(1,2013)
 
 

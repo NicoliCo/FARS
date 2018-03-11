@@ -21,7 +21,3 @@ Administration's
 \href{https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars}{Fatality Anlaysis Reporting System}
 (FARS) for those years.
 }
-\examples{
-fars_read_years(c(2013,2014,2015))
-
-}
